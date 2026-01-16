@@ -1,4 +1,4 @@
-(function() {
+(function () {
     const path = location.pathname;
     const parts = path.split('/').filter(Boolean);
     const toolsIndex = parts.indexOf('tools');
@@ -11,17 +11,18 @@
     }
 
     if (id) {
-        const payload = JSON.stringify({ id });
-        if (navigator.sendBeacon) {
-            navigator.sendBeacon('/api/clicks', new Blob([payload], { type: 'application/json' }));
-        } else {
-            fetch('/api/clicks', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: payload,
-                keepalive: true
-            });
-        }
+        return; // Disable click tracking for now
+        // const payload = JSON.stringify({ id });
+        // if (navigator.sendBeacon) {
+        //     navigator.sendBeacon('/api/clicks', new Blob([payload], { type: 'application/json' }));
+        // } else {
+        //     fetch('/api/clicks', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: payload,
+        //         keepalive: true
+        //     });
+        // }
     }
 
     if (toolsIndex !== -1 && parts[toolsIndex + 1] && !path.endsWith('/app.html')) {
