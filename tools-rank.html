@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <link rel="icon" href="favicon.svg">
     <meta charset="UTF-8">
@@ -207,6 +208,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -256,16 +258,16 @@
             tools = data.tools || [];
         }
 
-        async function loadStats() {
-            if (tools.length === 0) return;
-            const ids = tools.map(tool => tool.id).join(',');
-            const response = await fetch(`api/clicks?ids=${encodeURIComponent(ids)}`);
-            if (!response.ok) {
-                throw new Error('加载统计失败');
-            }
-            const data = await response.json();
-            stats = data.counts || {};
-        }
+        // async function loadStats() {
+        //     if (tools.length === 0) return;
+        //     const ids = tools.map(tool => tool.id).join(',');
+        //     const response = await fetch(`api/clicks?ids=${encodeURIComponent(ids)}`);
+        //     if (!response.ok) {
+        //         throw new Error('加载统计失败');
+        //     }
+        //     const data = await response.json();
+        //     stats = data.counts || {};
+        // }
 
         function getMetricValue(stat, metric) {
             if (!stat) return 0;
@@ -341,4 +343,5 @@
 
     <script src="assets/clicks.js" defer></script>
 </body>
+
 </html>
