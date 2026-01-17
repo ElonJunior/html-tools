@@ -1,8 +1,6 @@
 name: Deploy static content to Cloudflare Pages
 
 on:
-  schedule:
-
   # Runs on pushes targeting the current branch
   push:
     branches:
