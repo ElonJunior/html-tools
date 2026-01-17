@@ -74,7 +74,7 @@ def process_html_files(directory: str, ads_client_id: str = None, dry_run: bool 
 
                 # 2. 替换域名
                 REPLACE_PAIRS = {
-                    'https://www.htmls.dev/': 'https://tools.karing.app',
+                    'https://www.htmls.dev': 'https://tools.karing.app',
                     'https://htmls.dev' : 'https://tools.karing.app',
                     'github.com/justhtmls/html-tools' : 'github.com/ElonJunior/html-tools'
                 }
@@ -87,12 +87,13 @@ def process_html_files(directory: str, ads_client_id: str = None, dry_run: bool 
                         new_content = pattern.sub(new_domain, content)
 
                         if new_content != content:
-                            content = new_content
                             modified = True
                             # 统计替换了多少处
                             replacements = len(re.findall(re.escape(old_domain), content, re.IGNORECASE))
                             stats['links_replaced'] += replacements
                             print(f"  ✓ 已替换 {replacements} 处域名引用")
+
+                            content = new_content
                     #END for
 
                 # 如果文件有修改，则写入
