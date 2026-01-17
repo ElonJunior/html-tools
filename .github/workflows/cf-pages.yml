@@ -31,7 +31,7 @@ jobs:
       - name: update sitemap and jobs
         run: |
           python scripts/update_sitemap.py
-          python scripts/repalce_mark.py
+          python scripts/repalce_mark.py  ./  --no-dry-run
           rm -rf .git* ISSUE_TEMPLATE docs
 
       - name: Publish to Cloudflare Pages

@@ -327,7 +327,7 @@
         async function init() {
             try {
                 await loadTools();
-                await loadStats();
+                //await loadStats();
                 renderRankList(document.getElementById('rank-metric').value);
             } catch (error) {
                 document.getElementById('rank-list').innerHTML = `<div class="empty-state">${error.message}</div>`;

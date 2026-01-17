@@ -387,14 +387,16 @@
             });
         }
 
-        function downloadHTML() {
-            const html = getHTML();
-            if (!html.trim()) {
-                showToast('没有可下载的内容');
-                return;
-            }
+function downloadHTML() {
+    const html = getHTML();
+    if (!html.trim()) {
+        showToast('没有可下载的内容');
+        return;
+    }
 
-            const fullHtml = `<!DOCTYPE html>
+    // 创建一个简单的模板函数
+    const createHtmlTemplate = (content) => {
+        return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <link rel="icon" href="../../favicon.svg">
@@ -416,21 +418,28 @@
     </style>
 </head>
 <body>
-${html}
-    
-    <script src="../../assets/clicks.js" defer></script>
+${content}
+    <script src="../../assets/clicks.js" defer></` + `script>
 </body>
 </html>`;
+    };
 
-            const blob = new Blob([fullHtml], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'markdown-output.html';
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('已开始下载');
-        }
+    // 确保内容中的特殊字符被转义
+    const escapedHtml = html
+        .replace(/`/g, '\\`')
+        .replace(/\${/g, '\\${');
+
+    const fullHtml = createHtmlTemplate(escapedHtml);
+
+    const blob = new Blob([fullHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'markdown-output.html';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('已开始下载');
+}
 
         async function pasteMarkdown() {
             try {
