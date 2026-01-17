@@ -10,13 +10,13 @@ from pathlib import Path
 from datetime import datetime
 import sys
 
-BASE_URL = "https://www.htmls.dev"
+BASE_URL = "https://tools.karing.app"
 
 def generate_sitemap():
     """生成sitemap.xml"""
     # 脚本在 scripts/ 目录下，需要获取项目根目录
     base_dir = Path(__file__).parent.parent
-    
+
     # 读取工具列表
     try:
         with open(base_dir / 'index.json', 'r', encoding='utf-8') as f:
@@ -27,10 +27,10 @@ def generate_sitemap():
     except json.JSONDecodeError as e:
         print(f"错误: index.json 格式错误: {e}")
         sys.exit(1)
-    
+
     urls = []
     today = datetime.now().strftime('%Y-%m-%d')
-    
+
     # 添加主页
     urls.append({
         'loc': BASE_URL + '/',
@@ -38,7 +38,7 @@ def generate_sitemap():
         'changefreq': 'daily',
         'priority': '1.0'
     })
-    
+
     # 添加其他页面
     for page in ['reference.html']:
         page_path = base_dir / page
@@ -51,28 +51,28 @@ def generate_sitemap():
                 'changefreq': 'monthly',
                 'priority': '0.5'
             })
-    
+
     # 添加 CONTRIBUTING.md (指向 GitHub)
     contributing_path = base_dir / 'CONTRIBUTING.md'
     if contributing_path.exists():
         lastmod = datetime.fromtimestamp(contributing_path.stat().st_mtime).strftime('%Y-%m-%d')
         urls.append({
-            'loc': 'https://github.com/justhtmls/html-tools/blob/main/CONTRIBUTING.md',
+            'loc': 'https://github.com/ElonJunior/html-tools/raw/refs/heads/prod/CONTRIBUTING.md',
             'lastmod': lastmod,
             'changefreq': 'monthly',
             'priority': '0.5'
         })
-    
+
     # 添加所有工具页面
     for tool in data.get('tools', []):
         slug = tool.get('slug', '')
         if not slug:
             continue
-            
+
         # 工具详情页 (index.html)
         index_path = base_dir / 'tools' / slug / 'index.html'
         app_path = base_dir / 'tools' / slug / 'app.html'
-        
+
         # 使用文件的最后修改时间
         lastmod = tool.get('updatedAt', tool.get('createdAt', today))
         if index_path.exists():
@@ -80,31 +80,31 @@ def generate_sitemap():
             # 如果文件修改时间更新，使用文件时间
             if file_time > lastmod:
                 lastmod = file_time
-        
+
         urls.append({
             'loc': BASE_URL + '/tools/' + slug + '/',
             'lastmod': lastmod,
             'changefreq': 'monthly',
             'priority': '0.8'
         })
-        
+
         # 工具应用页 (app.html)
         if app_path.exists():
             app_time = datetime.fromtimestamp(app_path.stat().st_mtime).strftime('%Y-%m-%d')
             if app_time > lastmod:
                 lastmod = app_time
-        
+
         urls.append({
             'loc': BASE_URL + '/tools/' + slug + '/app.html',
             'lastmod': lastmod,
             'changefreq': 'monthly',
             'priority': '0.7'
         })
-    
+
     # 生成XML - 使用标准格式
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    
+
     for url in urls:
         xml += '  <url>\n'
         xml += f'    <loc>{url["loc"]}</loc>\n'
@@ -112,9 +112,9 @@ def generate_sitemap():
         xml += f'    <changefreq>{url["changefreq"]}</changefreq>\n'
         xml += f'    <priority>{url["priority"]}</priority>\n'
         xml += '  </url>\n'
-    
+
     xml += '</urlset>\n'
-    
+
     # 写入文件
     sitemap_path = base_dir / 'sitemap.xml'
     try:
