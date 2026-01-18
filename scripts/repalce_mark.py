@@ -66,7 +66,7 @@ def process_html_files(directory: str, ads_client_id: str = None, dry_run: bool 
                 if '</head>' in content:
                     # 检查是否已经包含Google Ads代码（避免重复添加）
                     if 'pagead2.googlesyndication.com' not in content:
-                        content = content.replace('</head>', f'{ads_code}\n</head>')
+                        content = content.replace('</head>', f'{ads_code}\n</head>', 1)
                         if content != original_content:
                             modified = True
                             stats['ads_added'] += 1
