@@ -163,18 +163,14 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label" data-i18n="client"></label>
                     <select id="target" class="form-select">
-                        <option value="clash">Clash</option>
-                        <option value="singbox">Sing-box</option>
-                        <option value="v2ray">V2Ray</option>
+                        <!-- 选项将通过JavaScript动态生成 -->
                     </select>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label" data-i18n="backend"></label>
                     <select id="backendSelect" class="form-select">
-                        <option value="http://127.0.0.1:25500">127.0.0.1</option>
-                        <option value="https://sub.ops.ci">sub.ops.ci</option>
-                        <option value="custom">Custom</option>
+                        <!-- 选项将通过JavaScript动态生成 -->
                     </select>
                     <input id="backendInput" class="form-control mt-2" data-i18n-placeholder="backend_placeholder"
                         style="display:none;">
@@ -186,8 +182,7 @@
                 <div class="col-md-9 mb-3">
                     <label class="form-label" data-i18n="config"></label>
                     <select id="configSelect" class="form-select">
-                        <option value="">Default</option>
-                        <option value="custom">Custom</option>
+                        <!-- 选项将通过JavaScript动态生成 -->
                     </select>
                     <input id="configInput" class="form-control mt-2" data-i18n-placeholder="config_placeholder"
                         style="display:none;">
@@ -233,6 +228,7 @@
     </footer>
 
     <script>
+        //START: lang
         $(document).ready(function () {
             const currentLang = window.INITIAL_LANG || 'zh';
 
@@ -248,7 +244,6 @@
                 });
         });
 
-        //START: lang
         function setLang(lang) {
             const i18nData = window.i18n;
             if (!i18nData || !i18nData[lang]) return;
@@ -307,13 +302,82 @@
             }
         });
         //END: lang
+    </script>
 
+    <script>
+        //START: config
+        $(document).ready(function () {
+            $.getJSON('config.json')
+                .done(function (configData) {
+                    initSelect('#target', configData.clients);
+                    initSelect('#backendSelect', configData.backends);
+                    initSelect('#configSelect', configData.configs);
+
+                    initDynamicBehavior();
+                })
+                .fail(function (jqxhr, textStatus, error) {
+                    console.error("加载配置文件失败: ", textStatus, error);
+                    alert("load config failed: " + textStatus);
+                });
+        });
+
+        /**
+        * 通用函数：用提供的数据初始化下拉列表
+        * @param {string} selector 下拉列表的选择器 (例如 '#target')
+        * @param {Array} options 选项数组，每个对象包含 value 和 label 属性
+        */
+        function initSelect(selector, options) {
+            const $select = $(selector);
+            $select.empty(); // 清空现有选项
+            options.forEach(function (opt) {
+                $select.append($('<option>', {
+                    value: opt.value,
+                    text: opt.label
+                }));
+            });
+        }
+
+        /**
+        * 初始化下拉列表相关的动态行为（显示/隐藏自定义输入框等）
+        * 这部分是您原有逻辑的迁移和适配
+        */
+        function initDynamicBehavior() {
+            // 后端自定义输入框切换
+            $('#backendSelect').change(function () {
+                const isCustom = $(this).val() === 'custom';
+                $('#backendInput').toggle(isCustom);
+                if (!isCustom) {
+                    $('#backendInput').val('');
+                }
+            }).trigger('change'); // 初始化时触发一次以设置正确状态
+
+            // 远程配置自定义输入框切换
+            $('#configSelect').change(function () {
+                const isCustom = $(this).val() === 'custom';
+                $('#configInput').toggle(isCustom);
+                if (!isCustom) {
+                    $('#configInput').val('');
+                }
+            }).trigger('change');
+
+            // 参数框显示/切换（保留您原有的逻辑）
+            $('#toggleParams').click(function () {
+                $('#paramsBox').slideToggle();
+            });
+        }
+        //END: config
+    </script>
+
+
+    <script>
         /* 展开参数 */
         $("#toggleParams").click(() => $("#paramsBox").toggle());
 
     </script>
 
+
     <script type="module" defer>
+        // 多语言国旗标
         import { polyfillCountryFlagEmojis } from "https://cdn.skypack.dev/country-flag-emoji-polyfill";
         polyfillCountryFlagEmojis();
     </script>
