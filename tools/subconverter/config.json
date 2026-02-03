@@ -1,0 +1,40 @@
+{
+    "clients": [
+        {
+            "value": "clash",
+            "label": "Clash"
+        },
+        {
+            "value": "singbox",
+            "label": "Sing-box"
+        },
+        {
+            "value": "v2ray",
+            "label": "V2Ray"
+        }
+    ],
+    "backends": [
+        {
+            "value": "http://127.0.0.1:25500",
+            "label": "127.0.0.1"
+        },
+        {
+            "value": "https://sub.ops.ci",
+            "label": "sub.ops.ci"
+        },
+        {
+            "value": "custom",
+            "label": "Custom"
+        }
+    ],
+    "configs": [
+        {
+            "value": "",
+            "label": "Default"
+        },
+        {
+            "value": "custom",
+            "label": "Custom"
+        }
+    ]
+}
