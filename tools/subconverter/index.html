@@ -1,312 +1,322 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
-<meta charset="UTF-8">
-<title>Subconverter Web</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Subconverter Web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<style>
-body{
-    font-family: "Twemoji Country Flags", system-ui, -apple-system, "Microsoft YaHei", sans-serif;
-    background: linear-gradient(180deg,#f8f9fc 0%,#eef1ff 100%);
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-}
+    <style>
+        body {
+            font-family: "Twemoji Country Flags", system-ui, -apple-system, "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #f8f9fc 0%, #eef1ff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-.navbar{
-    background:#ffffff;
-}
+        .navbar {
+            background: #ffffff;
+        }
 
-.navbar-brand{
-    font-weight:700;
-    font-size:20px;
-}
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 20px;
+        }
 
-.main-container{
-    max-width:1200px;
-    margin:auto;
-    margin-top:70px;
-    flex:1;
-}
+        .main-container {
+            max-width: 1200px;
+            margin: auto;
+            margin-top: 70px;
+            flex: 1;
+        }
 
-.title{
-    font-size:44px;
-    font-weight:800;
-    text-align:center;
-    background: linear-gradient(90deg,#5b6cff,#8f6bff);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    margin-bottom:50px;
-}
+        .title {
+            font-size: 44px;
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(90deg, #5b6cff, #8f6bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 50px;
+        }
 
-.card{
-    border-radius:18px;
-    border:none;
-    box-shadow:0 10px 30px rgba(0,0,0,0.05);
-}
+        .card {
+            border-radius: 18px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
 
-/* 语言按钮 */
-.lang-group button{
-    border-radius:20px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-.lang-group button.active{
-    background:#5b6cff;
-    color:white;
-    border-color:#5b6cff;
-}
+        /* 语言按钮 */
+        .lang-group button {
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-/* 参数按钮升级 */
-#toggleParams{
-    background:#ff9800;
-    border:none;
-    color:white;
-    border-radius:10px;
-    min-width:120px;
-    font-weight:600;
-    transition:all 0.2s;
-}
-#toggleParams:hover{
-    background:#f57c00;
-}
-#toggleParams:active{
-    background:#e65100;
-}
+        .lang-group button.active {
+            background: #5b6cff;
+            color: white;
+            border-color: #5b6cff;
+        }
 
-footer{
-    background:#fff;
-    text-align:center;
-    padding:18px 0;
-    box-shadow:0 -1px 5px rgba(0,0,0,0.05);
-    font-size:14px;
-}
-</style>
+        /* 参数按钮升级 */
+        #toggleParams {
+            background: #ff9800;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            min-width: 120px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        #toggleParams:hover {
+            background: #f57c00;
+        }
+
+        #toggleParams:active {
+            background: #e65100;
+        }
+
+        footer {
+            background: #fff;
+            text-align: center;
+            padding: 18px 0;
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+        }
+    </style>
+
+    <script>
+        // 语言检测与设置逻辑
+        (function () {
+            // 优先从URL参数获取语言（例如 ?lang=en）
+            const urlParams = new URLSearchParams(window.location.search);
+            let lang = urlParams.get('lang');
+
+            if (!lang) {
+                const browserLang = (navigator.language || navigator.userLanguage).toLowerCase().split('-')[0];
+                if (['zh', 'en', 'ru', 'fa'].includes(browserLang)) {
+                    lang = browserLang;
+                }
+            }
+
+            if (!['zh', 'en', 'ru', 'fa'].includes(lang)) {
+                lang = 'zh';
+            }
+
+            window.INITIAL_LANG = lang;
+            document.documentElement.setAttribute('data-lang', lang);
+        })();
+    </script>
 </head>
 
 <body>
 
-<!-- Header -->
-<nav class="navbar shadow-sm">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">subconverter</a>
-    <div class="ms-auto d-flex align-items-center gap-3">
-        <a href="#" class="nav-link">首页</a>
-        <a href="https://github.com/tindy2013/subconverter" target="_blank" class="nav-link">GitHub</a>
+    <!-- Header -->
+    <nav class="navbar shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">subconverter</a>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <a href="#" class="nav-link">首页</a>
+                <a href="https://github.com/tindy2013/subconverter" target="_blank" class="nav-link">GitHub</a>
 
-        <div class="btn-group lang-group">
-			<button class="btn btn-outline-secondary btn-sm active" data-lang="zh">
-				🇨🇳 中文
-			</button>
-			<button class="btn btn-outline-secondary btn-sm" data-lang="en">
-				🇬🇧 English
-			</button>
-			<button class="btn btn-outline-secondary btn-sm" data-lang="ru">
-				🇷🇺 Russian
-			</button>
-			<button class="btn btn-outline-secondary btn-sm" data-lang="fa">
-				🇮🇷 فارسی <!-- 波斯语通常使用 fa 作为语言代码 -->
-			</button>
-        </div>
-    </div>
-  </div>
-</nav>
-
-<div class="container main-container">
-
-    <div class="title" data-i18n="title">
-        Subconverter 订阅转换
-    </div>
-
-    <div class="card p-4">
-
-        <!-- 订阅 -->
-        <div class="mb-4">
-            <label class="form-label" data-i18n="sub_link"></label>
-            <textarea id="subUrl" class="form-control" rows="3"
-            data-i18n-placeholder="sub_placeholder"></textarea>
-        </div>
-
-        <!-- 客户端 + 后端 -->
-        <div class="row mb-4">
-            <div class="col-md-6 mb-3">
-                <label class="form-label" data-i18n="client"></label>
-                <select id="target" class="form-select">
-                    <option value="clash">Clash</option>
-                    <option value="singbox">Sing-box</option>
-                    <option value="v2ray">V2Ray</option>
-                </select>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label" data-i18n="backend"></label>
-                <select id="backendSelect" class="form-select">
-                    <option value="http://127.0.0.1:25500">127.0.0.1</option>
-                    <option value="https://sub.ops.ci">sub.ops.ci</option>
-                    <option value="custom">Custom</option>
-                </select>
-                <input id="backendInput" class="form-control mt-2"
-                       data-i18n-placeholder="backend_placeholder"
-                       style="display:none;">
-            </div>
-        </div>
-
-        <!-- 远程配置 -->
-        <div class="row mb-4 align-items-end">
-            <div class="col-md-9 mb-3">
-                <label class="form-label" data-i18n="config"></label>
-                <select id="configSelect" class="form-select">
-                    <option value="">Default</option>
-                    <option value="custom">Custom</option>
-                </select>
-                <input id="configInput" class="form-control mt-2"
-                       data-i18n-placeholder="config_placeholder"
-                       style="display:none;">
-            </div>
-
-            <div class="col-md-3 mb-3 text-end">
-                <button class="btn" id="toggleParams" data-i18n="params"></button>
-            </div>
-        </div>
-
-        <!-- 参数 -->
-        <div id="paramsBox" style="display:none;">
-            <div class="row mb-3">
-                <div class="col-md-6 mb-2">
-                    <input class="form-control" id="include" placeholder="include">
-                </div>
-                <div class="col-md-6 mb-2">
-                    <input class="form-control" id="exclude" placeholder="exclude">
+                <div class="btn-group lang-group">
+                    <button class="btn btn-outline-secondary btn-sm active" data-lang="zh">
+                        🇨🇳 中文
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" data-lang="en">
+                        🇬🇧 English
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" data-lang="ru">
+                        🇷🇺 Russian
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" data-lang="fa">
+                        🇮🇷 فارسی <!-- 波斯语通常使用 fa 作为语言代码 -->
+                    </button>
                 </div>
             </div>
         </div>
+    </nav>
 
-        <!-- 输出 -->
-        <div class="mb-3">
-            <input class="form-control" id="result" readonly>
+    <div class="container main-container">
+
+        <div class="title" data-i18n="title">
+            Subconverter 订阅转换
         </div>
 
-        <button class="btn btn-success w-100" id="convertBtn" data-i18n="convert"></button>
+        <div class="card p-4">
 
+            <!-- 订阅 -->
+            <div class="mb-4">
+                <label class="form-label" data-i18n="sub_link"></label>
+                <textarea id="subUrl" class="form-control" rows="3" data-i18n-placeholder="sub_placeholder"></textarea>
+            </div>
+
+            <!-- 客户端 + 后端 -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" data-i18n="client"></label>
+                    <select id="target" class="form-select">
+                        <option value="clash">Clash</option>
+                        <option value="singbox">Sing-box</option>
+                        <option value="v2ray">V2Ray</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" data-i18n="backend"></label>
+                    <select id="backendSelect" class="form-select">
+                        <option value="http://127.0.0.1:25500">127.0.0.1</option>
+                        <option value="https://sub.ops.ci">sub.ops.ci</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <input id="backendInput" class="form-control mt-2" data-i18n-placeholder="backend_placeholder"
+                        style="display:none;">
+                </div>
+            </div>
+
+            <!-- 远程配置 -->
+            <div class="row mb-4 align-items-end">
+                <div class="col-md-9 mb-3">
+                    <label class="form-label" data-i18n="config"></label>
+                    <select id="configSelect" class="form-select">
+                        <option value="">Default</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <input id="configInput" class="form-control mt-2" data-i18n-placeholder="config_placeholder"
+                        style="display:none;">
+                </div>
+
+                <div class="col-md-3 mb-3 text-end">
+                    <button class="btn" id="toggleParams" data-i18n="params"></button>
+                </div>
+            </div>
+
+            <!-- 参数 -->
+            <div id="paramsBox" style="display:none;">
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-2">
+                        <input class="form-control" id="include" placeholder="include">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input class="form-control" id="exclude" placeholder="exclude">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 输出 -->
+            <div class="mb-3">
+                <input class="form-control" id="result" readonly>
+            </div>
+
+            <button class="btn btn-success w-100" id="convertBtn" data-i18n="convert"></button>
+
+        </div>
     </div>
-</div>
 
-<!-- Footer -->
-<footer>
-    项目组：
-    <a href="https://github.com/tindy2013/subconverter" target="_blank">
-        GitHub.com/tindy2013/subconverter
-    </a><br>
-    <a href="https://github.com/ClashMI" target="_blank" data-i18n="clashmi_link">ClashMI</a> -
-    <span data-i18n="clashmi_desc">A powerful Clash GUI</span><br>
-    <a href="https://karing.me" target="_blank" data-i18n="karing_link">Karing</a> -
-    <span data-i18n="karing_desc">A VPN proxy manager</span>
-</footer>
+    <!-- Footer -->
+    <footer>
+        项目组：
+        <a href="https://github.com/tindy2013/subconverter" target="_blank">
+            GitHub.com/tindy2013/subconverter
+        </a><br>
+        <a href="https://github.com/ClashMI" target="_blank" data-i18n="clashmi_link">ClashMI</a> -
+        <span data-i18n="clashmi_desc">A powerful Clash GUI</span><br>
+        <a href="https://karing.me" target="_blank" data-i18n="karing_link">Karing</a> -
+        <span data-i18n="karing_desc">A VPN proxy manager</span>
+    </footer>
 
-<script>
+    <script>
+        $(document).ready(function () {
+            const currentLang = window.INITIAL_LANG || 'zh';
 
-/* 多语言 */
-const i18n = {
-    zh:{
-        title:"Subconverter 订阅转换",
-        sub_link:"订阅链接",
-        sub_placeholder:"多订阅链接或节点请确保每行一条   支持使用'|'分割",
-        client:"客户端",
-        backend:"后端服务",
-        backend_placeholder:"输入自定义后端地址",
-        config:"远程配置",
-        config_placeholder:"输入自定义配置地址",
-        params:"参数",
-        convert:"转换并复制",
-        clashmi_link:"ClashMI",
-        clashmi_desc:"一个强大的 Clash GUI",
-        karing_link:"Karing",
-        karing_desc:"一个 VPN 代理管理工具"
-    },
-    en:{
-        title:"Subscription Converter",
-        sub_link:"Subscription URL",
-        sub_placeholder:"One per line or use '|' to separate multiple links",
-        client:"Client",
-        backend:"Backend",
-        backend_placeholder:"Custom backend URL",
-        config:"Remote Config",
-        config_placeholder:"Custom config URL",
-        params:"Parameters",
-        convert:"Convert & Copy",
-        clashmi_link:"ClashMI",
-        clashmi_desc:"A powerful Clash GUI",
-        karing_link:"Karing",
-        karing_desc:"A VPN proxy manager"
-    },
-    ru:{
-        title:"Конвертер подписки",
-        sub_link:"Ссылка подписки",
-        sub_placeholder:"Каждая ссылка на новой строке или используйте '|' для разделения нескольких ссылок",
-        client:"Клиент",
-        backend:"Сервер",
-        backend_placeholder:"Свой URL для сервера",
-        config:"Удаленная конфигурация",
-        config_placeholder:"Свой URL для конфигурации",
-        params:"Параметры",
-        convert:"Конвертировать и скопировать",
-        clashmi_link:"ClashMI",
-        clashmi_desc:"Мощный GUI для Clash",
-        karing_link:"Karing",
-        karing_desc:"Менеджер VPN прокси"
-    },
-    fa:{
-        title:"تبدیل اشتراک",
-        sub_link:"لینک اشتراک",
-        sub_placeholder:"هر لینک در یک خط یا از '|' برای جدا کردن لینک‌ها استفاده کنید",
-        client:"کلاینت",
-        backend:"سرور",
-        backend_placeholder:"آدرس دلخواه برای سرور",
-        config:"پیکربندی از راه دور",
-        config_placeholder:"آدرس دلخواه برای پیکربندی",
-        params:"پارامترها",
-        convert:"تبدیل و کپی",
-        clashmi_link:"ClashMI",
-        clashmi_desc:"یک رابط گرافیکی قدرتمند برای Clash",
-        karing_link:"Karing",
-        karing_desc:"مدیر VPN و پروکسی"
-    }
-};
+            // 加载外部i18n.json文件
+            $.getJSON('i18n.json')
+                .done(function (i18nData) {
+                    window.i18n = i18nData;
+                    setLang(currentLang);
+                    initLangButtons(currentLang);
+                })
+                .fail(function (jqxhr, textStatus, error) {
+                    console.error("加载语言文件失败: ", textStatus, error);
+                });
+        });
 
-function setLang(lang){
-    $("[data-i18n]").each(function(){
-        const key = $(this).data("i18n");
-        if(i18n[lang] && i18n[lang][key])
-            $(this).text(i18n[lang][key]);
-    });
+        //START: lang
+        function setLang(lang) {
+            const i18nData = window.i18n;
+            if (!i18nData || !i18nData[lang]) return;
 
-    $("[data-i18n-placeholder]").each(function(){
-        const key = $(this).data("i18n-placeholder");
-        if(i18n[lang] && i18n[lang][key])
-            $(this).attr("placeholder",i18n[lang][key]);
-    });
-}
+            // 更新所有带 data-i18n 属性的元素
+            $("[data-i18n]").each(function () {
+                const key = $(this).data("i18n");
+                if (i18nData[lang][key]) {
+                    $(this).text(i18nData[lang][key]);
+                }
+            });
 
-$(".lang-group button").click(function(){
-    $(".lang-group button").removeClass("active");
-    $(this).addClass("active");
-    setLang($(this).data("lang"));
-});
+            // 更新所有带 data-i18n-placeholder 属性的元素
+            $("[data-i18n-placeholder]").each(function () {
+                const key = $(this).data("i18n-placeholder");
+                if (i18nData[lang][key]) {
+                    $(this).attr("placeholder", i18nData[lang][key]);
+                }
+            });
 
-setLang("zh");
+            // 更新当前语言到全局状态和HTML标签
+            window.currentLang = lang;
+            document.documentElement.setAttribute('data-lang', lang);
+        }
 
-/* 展开参数 */
-$("#toggleParams").click(()=>$("#paramsBox").toggle());
+        // 初始化语言按钮的函数
+        function initLangButtons(currentLang) {
+            // 设置当前语言按钮为激活状态
+            $(`.lang-group button[data-lang="${currentLang}"]`).addClass('active');
 
-</script>
-<script type="module" defer>
-  import { polyfillCountryFlagEmojis } from "https://cdn.skypack.dev/country-flag-emoji-polyfill";
-  polyfillCountryFlagEmojis();
-</script>
+            // 为按钮绑定点击事件
+            $(".lang-group button").click(function () {
+                const newLang = $(this).data("lang");
+                if (newLang === window.currentLang) return;
+
+                // 更新URL参数，不刷新页面（使用History API）
+                const url = new URL(window.location);
+                url.searchParams.set('lang', newLang);
+                window.history.pushState({}, '', url);
+
+                // 切换语言
+                $(".lang-group button").removeClass("active");
+                $(this).addClass("active");
+                setLang(newLang);
+            });
+        }
+
+        // 监听浏览器历史记录变化（例如用户点击前进/后退按钮）
+        $(window).on('popstate', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langFromUrl = urlParams.get('lang') || 'zh';
+            if (window.i18n && window.i18n[langFromUrl] && langFromUrl !== window.currentLang) {
+                $(`.lang-group button`).removeClass('active');
+                $(`.lang-group button[data-lang="${langFromUrl}"]`).addClass('active');
+                setLang(langFromUrl);
+            }
+        });
+        //END: lang
+
+        /* 展开参数 */
+        $("#toggleParams").click(() => $("#paramsBox").toggle());
+
+    </script>
+
+    <script type="module" defer>
+        import { polyfillCountryFlagEmojis } from "https://cdn.skypack.dev/country-flag-emoji-polyfill";
+        polyfillCountryFlagEmojis();
+    </script>
 </body>
+
 </html>
