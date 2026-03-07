@@ -3,6 +3,31 @@
   "lastUpdated": "2026-01-02",
   "tools": [
     {
+      "id": "Mihomo-sub-converter",
+      "name": "Clash (mihomo)配置转换工具",
+      "slug": "mihomo-sub-converter",
+      "category": "converter",
+      "tags": [
+        "clash",
+        "yaml",
+        "subconverter",
+        "mihomo"
+      ],
+      "author": "Kwisma",
+      "authorUrl": "https://github.com/Kwisma",
+      "version": "1.0.0",
+      "description": "多个订阅聚合一个 Clash/singbox 配置, 增加分流与隐私防护",
+      "longDescription": "Mihomo（Clash Meta）是一款高效的订阅汇聚工具，支持快速生成 Clash/singbox 配置文件，提供强大的分流与隐私防护功能，助您畅享安全无忧的网络体验。",
+      "icon": "🐯",
+      "color": "#3498db",
+      "entry": "tools/subconverter/converter.html",
+      "detail": "tools/subconverter/converter.html",
+      "createdAt": "2025-08-29",
+      "updatedAt": "2026-02-03",
+      "featured": true,
+      "repo": "https://github.com/Kwisma/cf-worker-mihomo"
+    },
+    {
       "id": "json-to-yaml",
       "name": "JSON 转 YAML",
       "slug": "json-to-yaml",
